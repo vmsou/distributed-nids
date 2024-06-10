@@ -1,0 +1,42 @@
+name: hdfs
+
+networks:
+  nids_network:
+    external: true
+
+services:
+  namenode:
+    image: vmsou/dnids-hdfs
+
+    hostname: namenode
+
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-hadoop/dfs/name"
+
+    volumes:
+      - ${PWD}/data/:/data/
+
+    networks:
+      - nids_network
+
+    ports:
+      - 9870:9870
+
+    command: hdfs namenode
+
+    deploy:
+      mode: global
+
+  datanode:
+    image: vmsou/dnids-hdfs
+
+    depends_on:
+      - namenode
+
+    networks:
+      - nids_network
+
+    command: hdfs datanode
+
+    deploy:
+      mode: replicated

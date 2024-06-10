@@ -1,0 +1,10 @@
+name: nids
+
+networks:
+  nids_network:
+    external: true
+
+include:
+  - infra/hdfs/compose.yml
+  - infra/spark/compose.yml
+  - infra/kafka/compose.yml

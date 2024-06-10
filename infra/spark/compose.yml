@@ -1,0 +1,47 @@
+name: spark
+
+networks:
+  nids_network:
+    external: true
+
+services:
+  master:
+    image: vmsou/dnids-spark
+
+    hostname: master
+
+    environment:
+      - SPARK_MASTER_HOST=master
+      - SPARK_MODE=master
+
+    networks:
+      - nids_network
+
+    ports:
+      -  8080:8080
+      -  7077:7077
+      -  4040:4040
+
+    volumes:
+    - ${PWD}/data/:/data/
+
+    deploy:
+      mode: global
+
+  worker:
+    image: vmsou/dnids-spark
+
+    depends_on:
+      - master
+
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://master:7077  # SPARK_MASTER_URL=spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT}
+      - SPARK_WORKER_MEMORY=2g
+      - SPARK_WORKER_CORES=2
+
+    networks:
+      - nids_network
+
+    deploy:
+      mode: replicated

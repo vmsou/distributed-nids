@@ -1,0 +1,97 @@
+name: kafka
+
+networks:
+  nids_network:
+    external: true
+
+services:
+  broker-1:
+    image: vmsou/dnids-kafka
+    container_name: kafka-broker-1
+    hostname: broker-1
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@broker-1:9094,2@broker-2:9094,3@broker-3:9094
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - BITNAMI_DEBUG=yes
+      - KAFKA_KRAFT_CLUSTER_ID=Bf-r4F4DSmSMQd8ax5lTHg
+      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://broker-1:9092
+      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://broker-1:9094,INTERNAL://:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+
+    networks:
+      - nids_network
+
+    ports:
+      - "9101:9092"
+      - "9102:9093"
+      - "9103:9094"
+
+  broker-2:
+    image: vmsou/dnids-kafka
+    hostname: broker-2
+    container_name: kafka-broker-2
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_BROKER_ID=2
+      - KAFKA_CFG_NODE_ID=2
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@broker-1:9094,2@broker-2:9094,3@broker-3:9094
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - BITNAMI_DEBUG=yes
+      - KAFKA_KRAFT_CLUSTER_ID=Bf-r4F4DSmSMQd8ax5lTHg
+      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://broker-2:9092
+      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://broker-2:9094,INTERNAL://:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+
+    networks:
+      - nids_network
+
+    ports:
+      - "9095:9092"
+      - "9096:9093"
+      - "9097:9094"
+
+  broker-3:
+    image: vmsou/dnids-kafka
+    hostname: broker-3
+    container_name: kafka-broker-3
+
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=kraft:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_BROKER_ID=3
+      - KAFKA_CFG_NODE_ID=3
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@broker-1:9094,2@broker-2:9094,3@broker-3:9094
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - BITNAMI_DEBUG=yes
+      - KAFKA_KRAFT_CLUSTER_ID=Bf-r4F4DSmSMQd8ax5lTHg
+      - KAFKA_CFG_KRAFT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_ADVERTISED_LISTENERS=kraft://:9093,INTERNAL://broker-3:9092
+      - KAFKA_CFG_LISTENERS=kraft://:9093,CONTROLLER://broker-3:9094,INTERNAL://:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+
+    networks:
+      - nids_network
+
+    ports:
+      - "9098:9092"
+      - "9099:9093"
+      - "9100:9094"
